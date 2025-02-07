@@ -7,7 +7,8 @@ RUN apk add --no-cache \
     socat \
     tzdata \
     bash \
-    dcron
+    dcron \
+    jq
 
 USER root
 # Install acme.sh
