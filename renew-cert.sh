@@ -14,13 +14,10 @@ log_message() {
 
 send_slack_notification() {
     local message="$1"
-    curl -X POST -H "Content-type: application/json" --data "{\"text\":\"${message}\"}" "$SLACK_WEBHOOK_URL"
+    log_message "Sending Slack notification: $message"
+    curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"${message}\"}" "$SLACK_WEBHOOK_URL"
 }
 
-send_slack_notification ":hourglass: Starting SSL certificate issuance/renewal for xurl.fyi"
-
-curl: option : blank argument where content is expected
-curl: try 'curl --help' or 'curl --manual' for more information
 
 # Ensure log file and certificate directory exist
 install -m 644 /dev/null $LOG_FILE
@@ -37,7 +34,7 @@ fi
 export Namecom_Username="${NAMECOM_USERNAME}"
 export Namecom_Token="${NAMECOM_TOKEN}"
 
-log_message "Starting certificate issuance/renewal process"
+log_message "Starting certificate issuance/renewal processes"
 send_slack_notification ":hourglass: Starting SSL certificate issuance/renewal for xurl.fyi"
 
 # Issue/renew the certificate
@@ -49,6 +46,7 @@ if $ACME_SH --issue \
     --key-file "$CERT_DIR/xurl.fyi.key" \
     --fullchain-file "$CERT_DIR/xurl.fyi.fullchain.pem" \
     --reloadcmd "nginx -s reload" \
+    --force \
     >> $LOG_FILE 2>&1; then
     log_message "Certificate renewal completed successfully"
     send_slack_notification ":white_check_mark: SSL certificate renewed successfully for xurl.fyi"
