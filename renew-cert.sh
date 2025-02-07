@@ -3,7 +3,7 @@ set -e
 
 # Path to log file
 LOG_FILE="/var/log/cert-renewal.log"
-CERT_DIR="/etc/nginx/ssl"
+CERT_DIR="/etc/letsencrypt/live"
 ACME_SH="/root/.acme.sh/acme.sh"  # Path to acme.sh
 SLACK_WEBHOOK_URL="${SLACK_MONITORING_WEB_HOOK}"  # Replace with your Slack webhook URL
 
