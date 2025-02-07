@@ -12,12 +12,15 @@ log_message() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a $LOG_FILE
 }
 
-# Function to send Slack notification
 send_slack_notification() {
     local message="$1"
-    curl -X POST -H "Content-type: application/json" --data "$(jq -n --arg text "$message" '{text: $text}')" "$SLACK_WEBHOOK_URL"
+    curl -X POST -H "Content-type: application/json" --data "{\"text\":\"${message}\"}" "$SLACK_WEBHOOK_URL"
 }
 
+send_slack_notification ":hourglass: Starting SSL certificate issuance/renewal for xurl.fyi"
+
+curl: option : blank argument where content is expected
+curl: try 'curl --help' or 'curl --manual' for more information
 
 # Ensure log file and certificate directory exist
 install -m 644 /dev/null $LOG_FILE
