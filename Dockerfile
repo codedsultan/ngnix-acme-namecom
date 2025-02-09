@@ -23,7 +23,8 @@ RUN ls -l /root/.acme.sh
 RUN /root/.acme.sh/acme.sh --version || echo "acme.sh failed to run"
 
 # Create directory for SSL certificates
-RUN mkdir -p /etc/nginx/ssl
+RUN mkdir -p /etc/letsencrypt/live
+
 
 # Copy and set up the renewal script
 COPY renew-cert.sh /usr/local/bin/
