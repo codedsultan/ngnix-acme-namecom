@@ -102,29 +102,31 @@ main() {
         --reloadcmd "nginx -s reload" \
         --force \
         >> $LOG_FILE 2>&1;
+
+        if [ -f "$CERT_DIR/$DOMAIN.fullchain.pem" ] && [ -f "$CERT_DIR/$DOMAIN.key" ]; then
+            log "Certificate files successfully installed"
+            # Check certificate expiry
+            EXPIRY_DATE=$(openssl x509 -in "$CERT_DIR/$DOMAIN.fullchain.pem" -noout -enddate | cut -d= -f2 || echo "")
+            
+            if [[ -n "$EXPIRY_DATE" ]]; then  # Check if EXPIRY_DATE is set before sending notification
+                send_slack_notification ":calendar: Certificate expires on: $EXPIRY_DATE"
+            else
+                log "WARNING: Unable to fetch certificate expiry date"
+                send_slack_notification ":warning: Unable to fetch SSL certificate expiry date."
+            fi
+            
+            reload_nginx
+            log "Certificate renewal completed successfully"
+            send_slack_notification ":white_check_mark: SSL certificate renewed successfully for $DOMAIN"
+        else
+            log "Error: Certificate files not found after renewal"
+            exit 1
+        fi
         
     fi
 
     # Verify certificate files
-    if [ -f "$CERT_DIR/$DOMAIN.fullchain.pem" ] && [ -f "$CERT_DIR/$DOMAIN.key" ]; then
-        log "Certificate files successfully installed"
-        # Check certificate expiry
-        EXPIRY_DATE=$(openssl x509 -in "$CERT_DIR/$DOMAIN.fullchain.pem" -noout -enddate | cut -d= -f2 || echo "")
-        
-        if [[ -n "$EXPIRY_DATE" ]]; then  # Check if EXPIRY_DATE is set before sending notification
-            send_slack_notification ":calendar: Certificate expires on: $EXPIRY_DATE"
-        else
-            log "WARNING: Unable to fetch certificate expiry date"
-            send_slack_notification ":warning: Unable to fetch SSL certificate expiry date."
-        fi
-        
-        reload_nginx
-        log "Certificate renewal completed successfully"
-        send_slack_notification ":white_check_mark: SSL certificate renewed successfully for $DOMAIN"
-    else
-        log "Error: Certificate files not found after renewal"
-        exit 1
-    fi
+    
 }
 
 # Run main function
