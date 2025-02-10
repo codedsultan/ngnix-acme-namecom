@@ -2,7 +2,7 @@
 set -e
 
 # Configuration
-# LOG_FILE="/var/log/cert-renewal.log"
+LOG_FILE="/var/log/cert-renewal.log"
 CERT_DIR="/etc/letsencrypt/live"
 DOMAIN="${DOMAIN}"
 STAGING="${STAGING}" #//false  # Set to true for testing
