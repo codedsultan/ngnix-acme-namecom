@@ -8,13 +8,12 @@ ARG SERVICE_GID=1000
 
 # Install required packages with explicit versions for better security
 RUN apk add --no-cache \
-    curl=8.5.0-r0 \
-    openssl=3.1.4-r2 \
-    socat=1.7.4.4-r1 \
-    tzdata=2024a-r0 \
-    bash=5.2.21-r0 \
-    dcron=4.5-r5 \
-    jq=1.7.1-r0 \
+    curl \
+    openssl \
+    socat \
+    tzdata \
+    bash \
+    dcron \
     && rm -rf /var/cache/apk/*
 
 # Create user and group with specified IDs
