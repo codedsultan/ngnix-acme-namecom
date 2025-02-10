@@ -44,9 +44,9 @@ send_slack_notification ":hourglass: Removing old DNS challenge records..."
 # $ACME_SH --remove-dns-dv -d "*.xurl.fyi"
 
 # Ensure removal before proceeding
-log_message "Checking for existing _acme-challenge TXT records..."
-send_slack_notification ":hourglass: Checking for existing _acme-challenge TXT records..."
-dig TXT _acme-challenge.xurl.fyi +short
+# log_message "Checking for existing _acme-challenge TXT records..."
+# send_slack_notification ":hourglass: Checking for existing _acme-challenge TXT records..."
+# dig TXT _acme-challenge.xurl.fyi +short
 # Issue/renew the certificate
 if $ACME_SH --issue \
     --dns dns_namecom \
