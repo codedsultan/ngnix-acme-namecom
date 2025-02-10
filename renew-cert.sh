@@ -23,11 +23,11 @@ send_slack_notification() {
     curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"${message}\"}" "$SLACK_WEBHOOK_URL"
 }
 # Check if we're running as the correct user
-if [ "$(id -u)" = "0" ]; then
-    log "Error: This script should not be run as root"
-    send_slack_notification ":x: ERROR: This script should not be run as root"
-    exit 1
-fi
+# if [ "$(id -u)" = "0" ]; then
+#     log "Error: This script should not be run as root"
+#     send_slack_notification ":x: ERROR: This script should not be run as root"
+#     exit 1
+# fi
 
 # Function to reload Nginx
 reload_nginx() {
