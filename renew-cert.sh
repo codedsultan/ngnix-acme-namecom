@@ -59,7 +59,7 @@ main() {
     # fi
 
     # Issue/renew certificate
-    if [! -f "$CERT_DIR/$DOMAIN.fullchain.pem" ] && [! -f "$CERT_DIR/$DOMAIN.key" ]; then
+    if [ ! -f "$CERT_DIR/$DOMAIN.fullchain.pem" ] && [ ! -f "$CERT_DIR/$DOMAIN.key" ]; then
         log "No existing certificate found. Issuing new certificate..."
         send_slack_notification ":warning: No existing certificate found. Issuing new certificate..."
         acme.sh --issue \
