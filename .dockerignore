@@ -1,3 +1,7 @@
 .git
 Dockerfile
 .env
+renew-cert-old.sh
+Dockerfile.base
+Dockerfile.dev
+.github
