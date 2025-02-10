@@ -26,7 +26,7 @@ RUN mkdir -p /etc/nginx/ssl /var/log/nginx /var/cache/nginx \
 
 # Install acme.sh with minimal permissions
 WORKDIR /home/${SERVICE_USER}
-USER ${SERVICE_USER}
+# USER ${SERVICE_USER}
 RUN curl https://get.acme.sh | sh -s email=your-email@example.com
 
 # Add acme.sh to PATH for service user

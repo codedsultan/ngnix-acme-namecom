@@ -61,7 +61,7 @@ main() {
     # Issue/renew certificate
     if [! -f "$CERT_DIR/$DOMAIN.fullchain.pem" ] && [! -f "$CERT_DIR/$DOMAIN.key" ]; then
         log "No existing certificate found. Issuing new certificate..."
-        slack ":warning: No existing certificate found. Issuing new certificate..."
+        send_slack_notification ":warning: No existing certificate found. Issuing new certificate..."
         acme.sh --issue \
         --dns dns_namecom \
         -d "$DOMAIN" \
@@ -89,7 +89,7 @@ main() {
         send_slack_notification ":white_check_mark: SSL certificate renewed successfully for $DOMAIN"
     else
         log "Attempting to renew existing certificate..."
-        slack "Attempting to renew existing certificate..."
+        send_slack_notification "Attempting to renew existing certificate..."
         acme.sh --renew \
         --dns dns_namecom \
         -d $DOMAIN \
