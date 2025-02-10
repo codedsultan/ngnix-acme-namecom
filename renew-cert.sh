@@ -73,7 +73,7 @@ main() {
         --fullchain-file "$CERT_DIR/$DOMAIN.fullchain.pem" \
         --reloadcmd "nginx -s reload" \
         --force \
-        >> $LOG_FILE 2>&1; then
+        >> $LOG_FILE 2>&1; 
 
         # Show certificate expiry date
         EXPIRY_DATE=$(openssl x509 -in "$CERT_DIR/$DOMAIN.fullchain.pem" -noout -enddate | cut -d= -f2 || echo "")
@@ -101,7 +101,7 @@ main() {
         --fullchain-file "$CERT_DIR/$DOMAIN.fullchain.pem" \
         --reloadcmd "nginx -s reload" \
         --force \
-        >> $LOG_FILE 2>&1; then
+        >> $LOG_FILE 2>&1;
         
     fi
 
