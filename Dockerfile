@@ -10,6 +10,8 @@ RUN apk add --no-cache \
     dcron \
     jq
 
+RUN mkdir -p /var/www/html/static/images
+
 USER root
 # Install acme.sh
 RUN curl https://get.acme.sh | sh 
