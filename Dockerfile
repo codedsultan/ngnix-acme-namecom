@@ -14,7 +14,8 @@ RUN apk add --no-cache \
 # Create deploy user (same UID/GID as host deploy user)
 RUN addgroup -g 1000 deploy && \
     adduser -u 1000 -G deploy -h /home/deploy -s /bin/bash -D deploy
-
+# Create the directory for acme.sh before installation
+RUN mkdir -p /etc/acme.sh && chown deploy:deploy /etc/acme.sh && chmod 755 /etc/acme.sh
 # Install acme.sh as deploy user
 USER deploy
 # RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL"
