@@ -2,66 +2,32 @@
 FROM nginx:alpine
 
 ARG ACME_EMAIL="codesultan369@gmail.com"
-# Install required packages
-RUN apk add --no-cache \
-    curl \
-    openssl \
-    socat \
-    tzdata \
-    bash \
-    dcron 
+RUN apk add --no-cache curl openssl socat tzdata
 
-# Create deploy user (same UID/GID as host deploy user)
+# Create deploy user (matching host UID/GID)
 RUN addgroup -g 1000 deploy && \
-    adduser -u 1000 -G deploy -h /home/deploy -s /bin/bash -D deploy
-# Create the directory for acme.sh before installation
-RUN mkdir -p /etc/acme.sh && chown deploy:deploy /etc/acme.sh && chmod 755 /etc/acme.sh
+    adduser -u 1000 -G deploy -h /home/deploy -s /bin/ash -D deploy
+
 # Install acme.sh as deploy user
 USER deploy
-# RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL"
-RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" --home /etc/acme.sh
-
-# Add acme.sh and local bin to PATH
-# ENV PATH="/home/deploy/.acme.sh:/home/deploy/.local/bin:${PATH}"
-ENV PATH="/etc/acme.sh:/home/deploy/.local/bin:${PATH}"
-
-
-# # Verify acme.sh installation
-# RUN ls -l /home/deploy/.acme.sh
-# RUN /home/deploy/.acme.sh/acme.sh --version || echo "acme.sh failed to run"
-
-# Verify acme.sh installation
-RUN ls -l /etc/acme.sh
-RUN /etc/acme.sh/acme.sh --version || echo "acme.sh failed to run"
+RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" --home /home/deploy/.acme.sh
+ENV PATH="/home/deploy/.acme.sh:${PATH}"
 
 USER root
 
-# Create directories and set permissions
-RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 /etc/nginx/ssl /etc/letsencrypt/live && \
-    chown -R deploy:deploy /usr/share/nginx/html /etc/nginx/ssl /etc/letsencrypt
+# Create directories with stricter permissions
+RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 \
+    /etc/nginx/ssl /etc/letsencrypt/live && \
+    chown -R deploy:deploy /usr/share/nginx/html && \
+    chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
 
-# Copy nginx config and maintenance page
-# COPY --chown=deploy:deploy nginx.conf /etc/nginx/conf.d/default.conf
+# Copy configs and scripts
 COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/maintenance.html
-
-# Copy and set up the renewal script
 COPY renew-cert.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/renew-cert.sh && chown deploy:deploy /usr/local/bin/renew-cert.sh
+RUN chmod +x /usr/local/bin/renew-cert.sh
 
-# Ensure deploy can write logs
-RUN touch /var/log/cert-renewal.log && chown deploy:deploy /var/log/cert-renewal.log
+# Configure cron for deploy user
+RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/deploy && \
+    chown deploy:deploy /etc/crontabs/deploy
 
-# Add cron job under root (deploy needs sudo for nginx)
-# RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/root
-RUN echo "0 3 * * * deploy /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/root
-
-
-# Switch back to root before running CMD
-USER root
-
-# Start cron and Nginx
-# CMD ["sh", "-c", "crond & nginx -g 'daemon off;'"]
-# CMD ["sh", "-c", "exec crond && exec nginx -g 'daemon off;'"]
-CMD ["sh", "-c", "exec crond -f && exec nginx -g 'daemon off;' -v"]
-
-
+CMD ["sh", "-c", "crond && nginx -g 'daemon off;'"]
