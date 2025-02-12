@@ -61,5 +61,7 @@ USER root
 
 # Start cron and Nginx
 # CMD ["sh", "-c", "crond & nginx -g 'daemon off;'"]
-CMD ["sh", "-c", "exec crond && exec nginx -g 'daemon off;'"]
+# CMD ["sh", "-c", "exec crond && exec nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "exec crond -f && exec nginx -g 'daemon off;' -v"]
+
 
