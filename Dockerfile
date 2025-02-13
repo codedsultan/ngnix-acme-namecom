@@ -10,7 +10,7 @@ RUN addgroup -g 1000 deploy && \
 
 # Install acme.sh as deploy user
 # Create directories with stricter permissions
-RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 /var/cache/nginx/client_temp\
+RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 /var/cache/nginx/client_temp /var/run/nginx \
     /etc/nginx/ssl /etc/letsencrypt/live && \
     chown -R deploy:deploy /usr/share/nginx/html /var/cache/nginx /var/run/nginx && \
     chmod -R 755 /var/log/nginx /usr/share/nginx/html /var/cache/nginx && \
