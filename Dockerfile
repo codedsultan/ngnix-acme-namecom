@@ -34,15 +34,24 @@ RUN mkdir -p /usr/share/nginx/html/{app1,app2} \
 COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/
 COPY --chown=deploy:deploy renew-cert.sh /usr/local/bin/
 RUN chmod 750 /usr/local/bin/renew-cert.sh
+ENV ACME_INSTALL_DIR="/usr/local/acme.sh"
 
-# Switch to deploy user for acme.sh installation
-USER deploy
-ENV HOME="/home/deploy"
-ENV PATH="$HOME/.acme.sh:$PATH"
+RUN mkdir -p ${ACME_INSTALL_DIR} && \
+    curl https://get.acme.sh | sh -s -- \
+    --accountemail "${ACME_EMAIL}" \
+    --install-dir "${ACME_INSTALL_DIR}" \
+    --no-profile
 
-# Install acme.sh
-RUN curl https://get.acme.sh | sh -s -- --accountemail "${ACME_EMAIL}"
-RUN acme.sh --version
+# Add to system PATH
+ENV PATH="${ACME_INSTALL_DIR}:$PATH"
+# # Switch to deploy user for acme.sh installation
+# USER deploy
+# ENV HOME="/home/deploy"
+# ENV PATH="$HOME/.acme.sh:$PATH"
+
+# # Install acme.sh
+# RUN curl https://get.acme.sh | sh -s -- --accountemail "${ACME_EMAIL}"
+# RUN acme.sh --version
 # Set up cron job
 USER root
 RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/deploy && \
