@@ -44,11 +44,11 @@ FROM nginx:alpine
 ARG ACME_EMAIL="codesultan369@gmail.com"
 
 # Install required packages
-RUN apk add --no-cache curl openssl socat tzdata dcron
+RUN apk add --no-cache curl openssl socat tzdata dcron bash
 
 # Create deploy user (matching host UID/GID)
 RUN addgroup -g 1000 deploy && \
-    adduser -u 1000 -G deploy -h /home/deploy -s /bin/ash -D deploy
+    adduser -u 1000 -G deploy -h /home/deploy -s /bin/bin/bash -D deploy
 
 # Ensure cron group exists (if necessary)
 # RUN addgroup -g 200 cron
@@ -74,13 +74,19 @@ RUN chmod +x /usr/local/bin/renew-cert.sh
 # RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" --home /home/deploy/.acme.sh
 # ENV PATH="/home/deploy/.acme.sh:${PATH}"
 # Create the .acme.sh directory
+
+USER deploy
+ENV HOME="/home/deploy"
+ENV PATH="$HOME/.acme.sh:$PATH"
+RUN echo 'export PATH="$HOME/.acme.sh:$PATH"' >> /home/deploy/.profile
+
 RUN mkdir -p /home/deploy/.acme.sh
 
 # Install acme.sh and set environment path
-RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" --home /home/deploy/.acme.sh
-
+RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" 
+# --home /home/deploy/.acme.sh
+USER root
 # Set the PATH environment variable for the deploy user
-ENV PATH="/home/deploy/.acme.sh:${PATH}"
 
 # Ensure permissions are correct for deploy user
 RUN chown -R deploy:deploy /home/deploy/.acme.sh
@@ -90,7 +96,7 @@ RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>
     chown deploy:deploy /etc/crontabs/deploy
 
 # Switch to root user for running crond and nginx
-USER root
+# USER root
 
 # Start cron and nginx processes
 CMD ["sh", "-c", "crond && nginx -g 'daemon off;'"]
