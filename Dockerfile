@@ -9,17 +9,26 @@ RUN addgroup -g 1000 deploy && \
     adduser -u 1000 -G deploy -h /home/deploy -s /bin/ash -D deploy
 
 # Install acme.sh as deploy user
+# Create directories with stricter permissions
+RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 \
+    /etc/nginx/ssl /etc/letsencrypt/live && \
+    chown -R deploy:deploy /usr/share/nginx/html && \
+    chmod -R 755 /var/log/nginx /usr/share/nginx/html && \
+    chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
+
 USER deploy
+
 RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" --home /home/deploy/.acme.sh
 ENV PATH="/home/deploy/.acme.sh:${PATH}"
 
-USER root
+# USER root
 
 # Create directories with stricter permissions
 RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 \
     /etc/nginx/ssl /etc/letsencrypt/live && \
     chown -R deploy:deploy /usr/share/nginx/html && \
-    chmod 777 /etc/nginx/ssl /etc/letsencrypt/live /var/log/nginx /usr/share/nginx/html
+    chmod -R 755 /var/log/nginx /usr/share/nginx/html && \
+    chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
 
 # Copy configs and scripts
 COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/maintenance.html
