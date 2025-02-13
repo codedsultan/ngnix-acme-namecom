@@ -16,6 +16,9 @@ RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 \
     chmod -R 755 /var/log/nginx /usr/share/nginx/html && \
     chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
 
+COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/maintenance.html
+COPY --chown=deploy:deploy renew-cert.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/renew-cert.sh
 USER deploy
 
 RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" --home /home/deploy/.acme.sh
@@ -31,9 +34,9 @@ ENV PATH="/home/deploy/.acme.sh:${PATH}"
 #     chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
 
 # Copy configs and scripts
-COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/maintenance.html
-COPY renew-cert.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/renew-cert.sh
+# COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/maintenance.html
+# COPY renew-cert.sh /usr/local/bin/
+# RUN chmod +x /usr/local/bin/renew-cert.sh
 
 # Configure cron for deploy user
 RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/deploy && \
