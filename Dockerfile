@@ -46,9 +46,13 @@ RUN cd /tmp && \
 # Add acme.sh to PATH
 ENV PATH="/usr/local/acme.sh:$PATH"
 
+
+# Test the installation
+RUN acme.sh --version
 # Set up cron job
 RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/deploy && \
     chown deploy:deploy /etc/crontabs/deploy
+
 
 # Add healthcheck
 # HEALTHCHECK --interval=30s --timeout=3s \
