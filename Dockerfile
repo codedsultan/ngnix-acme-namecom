@@ -42,7 +42,7 @@ ENV PATH="$HOME/.acme.sh:$PATH"
 
 # Install acme.sh
 RUN curl https://get.acme.sh | sh -s -- --accountemail "${ACME_EMAIL}"
-
+RUN acme.sh --version
 # Set up cron job
 USER root
 RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/deploy && \
