@@ -24,11 +24,11 @@ ENV PATH="/home/deploy/.acme.sh:${PATH}"
 # USER root
 
 # Create directories with stricter permissions
-RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 \
-    /etc/nginx/ssl /etc/letsencrypt/live && \
-    chown -R deploy:deploy /usr/share/nginx/html && \
-    chmod -R 755 /var/log/nginx /usr/share/nginx/html && \
-    chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
+# RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 \
+#     /etc/nginx/ssl /etc/letsencrypt/live && \
+#     chown -R deploy:deploy /usr/share/nginx/html && \
+#     chmod -R 755 /var/log/nginx /usr/share/nginx/html && \
+#     chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
 
 # Copy configs and scripts
 COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/maintenance.html
