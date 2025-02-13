@@ -71,8 +71,19 @@ COPY --chown=deploy:deploy renew-cert.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/renew-cert.sh
 
 # Install acme.sh and set environment path
+# RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" --home /home/deploy/.acme.sh
+# ENV PATH="/home/deploy/.acme.sh:${PATH}"
+# Create the .acme.sh directory
+RUN mkdir -p /home/deploy/.acme.sh
+
+# Install acme.sh and set environment path
 RUN curl https://get.acme.sh | sh -s -- --accountemail "$ACME_EMAIL" --home /home/deploy/.acme.sh
+
+# Set the PATH environment variable for the deploy user
 ENV PATH="/home/deploy/.acme.sh:${PATH}"
+
+# Ensure permissions are correct for deploy user
+RUN chown -R deploy:deploy /home/deploy/.acme.sh
 
 # Configure cron for deploy user
 RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/deploy && \
