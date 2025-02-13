@@ -51,7 +51,7 @@ RUN addgroup -g 1000 deploy && \
     adduser -u 1000 -G deploy -h /home/deploy -s /bin/ash -D deploy
 
 # Ensure cron group exists (if necessary)
-RUN addgroup -g 200 cron
+# RUN addgroup -g 200 cron
 RUN usermod -aG cron deploy
 
 # Install acme.sh as deploy user
