@@ -44,7 +44,12 @@ RUN cd /tmp && \
     rm -f acme.sh
 # ENV HOME="/usr/local"
 # RUN curl https://get.acme.sh | sh -s email=my@example.com
-RUN curl -o /usr/local/acme.sh/dnsapi/dns_namecom.sh https://raw.githubusercontent.com/acmesh-official/acme.sh/master/dnsapi/dns_namecom.sh
+# Create dnsapi directory and download the Name.com DNS API script
+RUN mkdir -p /usr/local/acme.sh/dnsapi && \
+    curl -o /usr/local/acme.sh/dnsapi/dns_namecom.sh \
+    https://raw.githubusercontent.com/acmesh-official/acme.sh/master/dnsapi/dns_namecom.sh && \
+    chmod +x /usr/local/acme.sh/dnsapi/dns_namecom.sh
+
 # Add acme.sh to PATH
 # ENV PATH="/root/.acme.sh:$PATH"    
 # Add acme.sh to PATH
