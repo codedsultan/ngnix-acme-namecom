@@ -49,7 +49,7 @@ RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>
     chown deploy:deploy /etc/crontabs/deploy
 
 # Use non-root user for running services
-USER deploy
+# USER deploy
 
 # Start cron and nginx with proper initialization
 CMD ["sh", "-c", "crond && nginx -g 'daemon off;'"]
