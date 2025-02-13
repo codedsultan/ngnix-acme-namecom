@@ -34,17 +34,17 @@ COPY --chown=deploy:deploy renew-cert.sh /usr/local/bin/
 RUN chmod 750 /usr/local/bin/renew-cert.sh
 
 # Install acme.sh system-wide with proper setup
-# RUN cd /tmp && \
-#     curl https://raw.githubusercontent.com/acmesh-official/acme.sh/master/acme.sh -o acme.sh && \
-#     chmod +x acme.sh && \
-#     ./acme.sh --install \
-#       --home /usr/local/acme.sh \
-#       --accountemail "${ACME_EMAIL}" \
-#       --no-profile && \
-#     rm -f acme.sh
-ENV HOME="/usr/local"
-RUN curl https://get.acme.sh | sh -s email=my@example.com
-
+RUN cd /tmp && \
+    curl https://raw.githubusercontent.com/acmesh-official/acme.sh/master/acme.sh -o acme.sh && \
+    chmod +x acme.sh && \
+    ./acme.sh --install \
+      --home /usr/local/acme.sh \
+      --accountemail "${ACME_EMAIL}" \
+      --no-profile && \
+    rm -f acme.sh
+# ENV HOME="/usr/local"
+# RUN curl https://get.acme.sh | sh -s email=my@example.com
+RUN curl -o /usr/local/acme.sh/dnsapi/dns_namecom.sh https://raw.githubusercontent.com/acmesh-official/acme.sh/master/dnsapi/dns_namecom.sh
 # Add acme.sh to PATH
 # ENV PATH="/root/.acme.sh:$PATH"    
 # Add acme.sh to PATH
