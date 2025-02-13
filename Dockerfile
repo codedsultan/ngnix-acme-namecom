@@ -12,7 +12,7 @@ RUN addgroup -g 1000 deploy && \
 # Create directories with stricter permissions
 RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 /var/cache/nginx/client_temp\
     /etc/nginx/ssl /etc/letsencrypt/live && \
-    chown -R deploy:deploy /usr/share/nginx/html /var/cache/nginx && \
+    chown -R deploy:deploy /usr/share/nginx/html /var/cache/nginx /var/run/nginx && \
     chmod -R 755 /var/log/nginx /usr/share/nginx/html /var/cache/nginx && \
     chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
 
