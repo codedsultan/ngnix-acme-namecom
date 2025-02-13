@@ -19,7 +19,7 @@ USER root
 RUN mkdir -p /usr/share/nginx/html/app1 /usr/share/nginx/html/app2 \
     /etc/nginx/ssl /etc/letsencrypt/live && \
     chown -R deploy:deploy /usr/share/nginx/html && \
-    chmod 755 /etc/nginx/ssl /etc/letsencrypt/live
+    chmod 777 /etc/nginx/ssl /etc/letsencrypt/live
 
 # Copy configs and scripts
 COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/maintenance.html
