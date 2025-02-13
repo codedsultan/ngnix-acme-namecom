@@ -78,7 +78,7 @@ RUN chmod +x /usr/local/bin/renew-cert.sh
 USER deploy
 ENV HOME="/home/deploy"
 ENV PATH="$HOME/.acme.sh:$PATH"
-RUN echo 'export PATH="$HOME/.acme.sh:$PATH"' >> /home/deploy/.profile
+RUN echo 'export PATH="$HOME/.acme.sh:$PATH"' >> /home/deploy/.bashrc
 
 RUN mkdir -p /home/deploy/.acme.sh
 
