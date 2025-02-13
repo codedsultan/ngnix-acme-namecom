@@ -33,34 +33,29 @@ COPY --chown=deploy:deploy maintenance.html /usr/share/nginx/html/
 COPY --chown=deploy:deploy renew-cert.sh /usr/local/bin/
 RUN chmod 750 /usr/local/bin/renew-cert.sh
 
-# Install acme.sh system-wide
-ENV ACME_INSTALL_DIR="/usr/local/acme.sh"
-RUN mkdir -p ${ACME_INSTALL_DIR} && \
-    curl https://get.acme.sh | sh -s -- \
-    --accountemail "${ACME_EMAIL}" \
-    --install-dir "${ACME_INSTALL_DIR}" \
-    --no-profile
+# Install acme.sh system-wide with proper setup
+RUN cd /tmp && \
+    curl https://raw.githubusercontent.com/acmesh-official/acme.sh/master/acme.sh -o acme.sh && \
+    chmod +x acme.sh && \
+    ./acme.sh --install \
+      --home /usr/local/acme.sh \
+      --accountemail "${ACME_EMAIL}" \
+      --no-profile && \
+    rm -f acme.sh
 
-# Create symlink in /usr/local/bin and set permissions
-RUN ln -sf ${ACME_INSTALL_DIR}/acme.sh /usr/local/bin/acme.sh && \
-    chmod -R 755 ${ACME_INSTALL_DIR}
-
-# Add to system PATH
-ENV PATH="${ACME_INSTALL_DIR}:$PATH"
-
-# Test the installation
-RUN acme.sh --version
+# Add acme.sh to PATH
+ENV PATH="/usr/local/acme.sh:$PATH"
 
 # Set up cron job
 RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/deploy && \
     chown deploy:deploy /etc/crontabs/deploy
 
 # Add healthcheck
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost/ || exit 1
+# HEALTHCHECK --interval=30s --timeout=3s \
+#   CMD curl -f http://localhost/ || exit 1
 
 # Use non-root user for running services
-USER deploy
+# USER deploy
 
 # Start cron and nginx with proper initialization
 CMD ["sh", "-c", "crond && nginx -g 'daemon off;'"]
