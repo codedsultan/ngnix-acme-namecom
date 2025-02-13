@@ -52,7 +52,8 @@ RUN addgroup -g 1000 deploy && \
 
 # Ensure cron group exists (if necessary)
 # RUN addgroup -g 200 cron
-RUN usermod -aG cron deploy
+# RUN addgroup -S cron
+# RUN usermod -aG cron deploy
 
 # Install acme.sh as deploy user
 # Create directories with stricter permissions
