@@ -42,6 +42,7 @@ ENV PATH="/home/deploy/.acme.sh:${PATH}"
 RUN echo "0 3 * * * /usr/local/bin/renew-cert.sh >> /var/log/cert-renewal.log 2>&1" > /etc/crontabs/deploy && \
     chown deploy:deploy /etc/crontabs/deploy
 
-USER deploy
+# USER deploy
+USER root
 
 CMD ["sh", "-c", "crond && nginx -g 'daemon off;'"]
