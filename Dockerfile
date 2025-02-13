@@ -11,6 +11,10 @@ RUN apk add --no-cache curl openssl socat tzdata dcron bash
 RUN addgroup -g ${DEPLOY_GID} deploy && \
     adduser -u ${DEPLOY_UID} -G deploy -h /home/deploy -s /bin/bash -D deploy
 
+# Add nginx user to the deploy group
+RUN adduser nginx deploy
+
+
 # Set up directories with proper permissions
 RUN mkdir -p /usr/share/nginx/html/{app1,app2} \
             /var/cache/nginx/client_temp \
