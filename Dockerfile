@@ -49,7 +49,6 @@ RUN curl https://get.acme.sh | sh -s email=my@example.com
 # ENV PATH="/root/.acme.sh:$PATH"    
 # Add acme.sh to PATH
 # Set HOME environment variable
-ENV HOME=/usr/local
 ENV PATH="/usr/local/acme.sh:$PATH"
 
 
