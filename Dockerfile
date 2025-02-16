@@ -35,10 +35,12 @@ RUN mkdir -p /var/run/nginx /var/cache/nginx /var/log/nginx /usr/share/nginx/htm
 # RUN sed -i 's/user  nginx/user  www-data/g' /etc/nginx/nginx.conf
 
 # Update permissions for nginx directories
-RUN chown -R www-data:www-data /etc/nginx && \
-    chmod -R 755 /etc/nginx
+# RUN chown -R www-data:www-data /etc/nginx && \
+#     chmod -R 755 /etc/nginx
 
-    
+# RUN sed -i 's/listen  *80;/listen 8080;/g' /etc/nginx/conf.d/default.conf && \
+    # Update pid path in nginx.conf
+RUN sed -i 's@pid        /var/run/nginx.pid;@pid        /var/run/nginx/nginx.pid;@g' /etc/nginx/nginx.conf  
 # RUN mkdir -p /usr/share/nginx/html && \
 #     chown -R www-data:www-data /usr/share/nginx/html && \
 #     chmod -R 755 /usr/share/nginx/html
