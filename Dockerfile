@@ -18,7 +18,7 @@ USER root
 
 RUN mkdir -p /var/run/nginx /var/cache/nginx /var/log/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static && \
     chown -R www-data:www-data /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static && \
-    chmod -R 755 /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static&& \
+    chmod -R 777 /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static && \
     # Specifically ensure PID directory is writable
     chmod 777 /var/run
 
