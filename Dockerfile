@@ -14,6 +14,7 @@ RUN deluser nginx && \
 # RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
 #     chown -R www-data:www-data /var/cache/nginx /var/run /var/log/nginx /etc/nginx  /usr/share/nginx/html && \
 #     chmod -R 755 /var/cache/nginx /var/run /var/log/nginx /etc/nginx  /usr/share/nginx/html 
+USER root
 
 RUN mkdir -p /var/run/nginx /var/cache/nginx /var/log/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static && \
     chown -R www-data:www-data /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static && \
