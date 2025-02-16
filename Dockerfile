@@ -50,7 +50,7 @@ RUN sed -i 's@pid        /var/run/nginx.pid;@pid        /var/run/nginx/nginx.pid
 #     chown -R www-data:www-data /var/www/errors /var/www/laravel/public /var/www/laravel/storage /var/www/nodejs/static /var/log/nginx 
 
 # Set Nginx to run as www-data
-# RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf
+RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf
 
 # Copy custom Nginx config
 # COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
