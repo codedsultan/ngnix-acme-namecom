@@ -3,8 +3,9 @@ FROM nginx:alpine
 # Install required packages
 RUN apk add --no-cache bash curl
 
-# Ensure www-data user and group exist
-RUN addgroup -g 33 -S www-data && adduser -u 33 -D -S -G www-data www-data
+# Ensure www-data user and group exist only if missing
+RUN getent group www-data || addgroup -g 33 -S www-data && \
+    getent passwd www-data || adduser -u 33 -D -S -G www-data www-data
 
 # Ensure required directories exist before changing ownership
 RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx \
