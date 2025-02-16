@@ -7,7 +7,7 @@ RUN apk add --no-cache bash curl
 RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf
 
 # Copy custom Nginx config
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+# COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Set permissions
 RUN chown -R www-data:www-data /var/cache/nginx /var/run /var/log/nginx
