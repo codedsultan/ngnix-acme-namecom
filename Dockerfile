@@ -11,7 +11,7 @@ RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx \
 RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf
 
 # Copy custom Nginx config
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+# COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Set user after permissions are set
 USER www-data
