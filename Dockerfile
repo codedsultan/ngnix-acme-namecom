@@ -8,9 +8,11 @@ RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf
 
 # Copy custom Nginx config
 # COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-
+USER root
 # Set permissions
 RUN chown -R www-data:www-data /var/cache/nginx /var/run /var/log/nginx
+
+USER www-data
 
 EXPOSE 80
 
