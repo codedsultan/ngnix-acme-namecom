@@ -8,7 +8,7 @@ RUN getent group www-data || addgroup -g 33 -S www-data && \
     getent passwd www-data || adduser -u 33 -D -S -G www-data www-data
 
 # Ensure required directories exist before changing ownership
-RUN mkdir -p /var/cache/nginx /var/run /var/www/errors /var/www/laravel/public /var/www/laravel/storage /var/www/nodejs/static /var/log/nginx /var/run/nginx && \
+RUN mkdir -p /var/cache/nginx /var/run /var/www/errors /var/www/laravel/public /var/www/laravel/storage /var/www/nodejs/static /var/log/nginx /var/run/nginx /var/cache/nginx/client_temp && \
     chown -R www-data:www-data /var/www/errors /var/www/laravel/public /var/www/laravel/storage /var/www/nodejs/static /var/log/nginx /var/run/nginx 
 
 # Set Nginx to run as www-data
