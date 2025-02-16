@@ -11,9 +11,15 @@ RUN deluser nginx && \
     adduser -u 33 -D -S -G www-data www-data
 
 # Configure directories and permissions
-RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
-    chown -R www-data:www-data /var/cache/nginx /var/run /var/log/nginx /etc/nginx  /usr/share/nginx/html && \
-    chmod -R 755 /var/cache/nginx /var/run /var/log/nginx /etc/nginx  /usr/share/nginx/html 
+# RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
+#     chown -R www-data:www-data /var/cache/nginx /var/run /var/log/nginx /etc/nginx  /usr/share/nginx/html && \
+#     chmod -R 755 /var/cache/nginx /var/run /var/log/nginx /etc/nginx  /usr/share/nginx/html 
+
+RUN mkdir -p /var/run/nginx /var/cache/nginx /var/log/nginx /usr/share/nginx/html && \
+    chown -R www-data:www-data /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html&& \
+    chmod -R 755 /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html && \
+    # Specifically ensure PID directory is writable
+    chmod 777 /var/run
 
 # Ensure required directories exist before changing ownership
 # RUN mkdir -p /var/cache/nginx /var/run /var/www/errors /var/www/laravel/public /var/www/laravel/storage /var/www/nodejs/static /var/log/nginx /var/run/nginx /var/cache/nginx/client_temp && \
