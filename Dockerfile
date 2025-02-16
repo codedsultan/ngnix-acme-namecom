@@ -12,14 +12,14 @@ RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx \
     && chown -R www-data:www-data /var/cache/nginx /var/run /var/log/nginx
 
 # Set Nginx to run as www-data
-RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf
+# RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf
 
 # Copy custom Nginx config
 # COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
+EXPOSE 80
 # Switch to non-root user
 USER www-data
 
-EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
