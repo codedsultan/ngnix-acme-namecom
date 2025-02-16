@@ -15,9 +15,9 @@ RUN deluser nginx && \
 #     chown -R www-data:www-data /var/cache/nginx /var/run /var/log/nginx /etc/nginx  /usr/share/nginx/html && \
 #     chmod -R 755 /var/cache/nginx /var/run /var/log/nginx /etc/nginx  /usr/share/nginx/html 
 
-RUN mkdir -p /var/run/nginx /var/cache/nginx /var/log/nginx /usr/share/nginx/html && \
-    chown -R www-data:www-data /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html&& \
-    chmod -R 755 /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html && \
+RUN mkdir -p /var/run/nginx /var/cache/nginx /var/log/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static && \
+    chown -R www-data:www-data /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static && \
+    chmod -R 755 /var/run/nginx /var/cache/nginx /var/log/nginx /etc/nginx /usr/share/nginx/html /usr/share/nginx/html/nodejs/static&& \
     # Specifically ensure PID directory is writable
     chmod 777 /var/run
 
