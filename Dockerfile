@@ -5,7 +5,8 @@ FROM nginx:alpine
 
 # Set the working directory for the Nginx configuration files
 # WORKDIR /etc/nginx
-
+RUN deluser nginx && \
+    adduser -u 33 -D -S -G www-data www-data
 # Copy your custom Nginx configuration files
 # Assuming you have a 'default.conf' and other configuration files
 # COPY ./nginx.conf /etc/nginx/nginx.conf
